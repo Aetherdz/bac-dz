@@ -3,7 +3,7 @@ import { absolute } from "@/lib/seo";
 import { siteSections } from "@/lib/routes";
 
 export default function robots(): MetadataRoute.Robots {
-  const searchPaths = Object.values(siteSections.staticPaths.search).map((segments) => `/${segments.join("/")}`);
+  const searchPaths = [...new Set(Object.values(siteSections.staticPaths.search).map((segments) => `/${segments.join("/")}`))];
   const localizedSearch = ["ar", "fr", "en"].flatMap((locale) => searchPaths.map((path) => `/${locale}${path}`));
 
   return {
@@ -11,10 +11,9 @@ export default function robots(): MetadataRoute.Robots {
       {
         userAgent: "*",
         allow: "/",
-        disallow: ["/admin", "/api/", ...localizedSearch],
+        disallow: [...new Set(["/admin", "/api/", ...localizedSearch])],
       },
     ],
     sitemap: absolute("/sitemap.xml"),
-    host: absolute("/"),
   };
 }
