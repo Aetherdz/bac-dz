@@ -108,7 +108,7 @@ export function MobileTabBar({ locale }: { locale: Locale }) {
     <>
       <nav
         aria-label={tx(locale, { ar: "التنقل السفلي", fr: "Navigation principale", en: "Primary navigation" })}
-        className="fixed inset-x-0 bottom-0 z-40 border-t border-line-strong bg-bg/95 backdrop-blur-md lg:hidden"
+        className="fixed inset-x-0 bottom-0 z-40 border-t border-line-strong bg-bg lg:hidden"
         style={{ paddingBottom: "env(safe-area-inset-bottom)" }}
       >
         <ul className="grid grid-cols-5">
@@ -155,7 +155,7 @@ export function MobileTabBar({ locale }: { locale: Locale }) {
             onClick={() => setOpen(false)}
           />
           <div className="absolute inset-x-0 bottom-0 max-h-[88dvh] overflow-y-auto rounded-t-[14px] border-t border-line-strong bg-bg pb-[calc(1rem+env(safe-area-inset-bottom))]">
-            <div className="sticky top-0 z-10 flex items-center justify-between gap-3 border-b border-line bg-bg/95 px-5 py-3 backdrop-blur">
+            <div className="sticky top-0 z-10 flex items-center justify-between gap-3 border-b border-line bg-bg px-5 py-3">
               <div className="flex items-center gap-2">
                 <BrandMark className="h-7 w-7 shrink-0" title={null} />
                 <span className="text-[10px] uppercase tracking-[0.16em] text-muted">

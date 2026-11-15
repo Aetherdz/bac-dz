@@ -364,7 +364,7 @@ function PomodoroDock({ locale }: { locale: Locale }) {
   return (
     <div className="pointer-events-none fixed inset-x-0 bottom-[calc(56px+env(safe-area-inset-bottom))] z-40 pb-2 pt-2 lg:bottom-0 lg:pb-3">
       <div className="shell">
-        <div className="pointer-events-auto flex items-center gap-2.5 border border-line-strong bg-surface/95 px-3 py-2 backdrop-blur-sm sm:gap-4 sm:px-4">
+        <div className="pointer-events-auto flex items-center gap-2.5 border border-line-strong bg-surface px-3 py-2 sm:gap-4 sm:px-4">
           <span aria-hidden className="h-2 w-2 shrink-0 bg-brand" />
           <span className="hidden text-[10.5px] uppercase tracking-[0.16em] text-muted sm:inline">
             {tx(locale, phaseLabel[state.phase])}

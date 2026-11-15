@@ -408,7 +408,7 @@ function ToggleRow({
       >
         <span
           aria-hidden
-          className={`relative block h-6 w-11 border transition-colors ${checked ? "border-brand bg-brand" : "border-line-strong bg-transparent"}`}
+          className={`relative block h-6 w-11 border transition-colors ${checked ? "border-brand bg-brand" : "border-line-strong bg-raised"}`}
         >
           <span
             aria-hidden

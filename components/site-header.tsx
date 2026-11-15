@@ -19,7 +19,7 @@ export function SiteHeader({ locale }: { locale: Locale }) {
   ];
 
   return (
-    <header className="sticky top-0 z-40 border-b border-line-strong bg-bg/95 backdrop-blur-md">
+    <header className="sticky top-0 z-40 border-b border-line-strong bg-bg">
       {/* Editorial dateline — desktop only; on mobile the app bar is compact. */}
       <div className="hidden border-b border-line lg:block">
         <div className="shell flex h-8 items-center justify-between gap-3 text-[10px] uppercase tracking-[0.14em] text-muted">
