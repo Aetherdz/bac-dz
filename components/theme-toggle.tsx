@@ -30,7 +30,7 @@ export function ThemeToggle({ label }: { label: string }) {
       aria-label={label}
       title={label}
       aria-pressed={mounted ? dark : undefined}
-      className="flex h-10 w-10 items-center justify-center rounded-full border border-line bg-surface text-ink transition-colors hover:border-brand hover:text-brand"
+      className="grid h-10 w-10 place-items-center rounded-card border border-line-strong bg-surface text-ink transition-colors hover:border-ink hover:text-brand lg:h-9 lg:w-9"
     >
       {mounted && dark ? <IconSun size={17} /> : <IconMoon size={17} />}
     </button>

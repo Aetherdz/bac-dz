@@ -2,31 +2,50 @@
 @tailwind components;
 @tailwind utilities;
 
+/*
+ * BAC DZ — editorial print system.
+ * Bone paper, ink text, a single pine accent, hairline rules, no shadows,
+ * no gradients, 2px radius. Numerals are tabular everywhere a number is data.
+ */
+
 :root {
-  --bg: 246 244 236;
-  --surface: 255 253 247;
-  --raised: 250 248 240;
-  --ink: 16 32 27;
-  --muted: 88 105 96;
-  --line: 219 214 199;
-  --brand: 14 90 60;
-  --brand-ink: 255 255 255;
-  --accent: 168 42 35;
-  --gold: 150 105 41;
+  --bg: 246 244 237;
+  --surface: 251 249 243;
+  --raised: 241 238 229;
+  --ink: 21 26 23;
+  --muted: 92 100 94;
+  --line: 214 210 198;
+  --line-strong: 168 165 152;
+  --brand: 21 82 57;
+  --brand-ink: 250 249 244;
+  --accent: 21 26 23;
+  --gold: 92 100 94;
+  /* Brand seal: an ink tile with a bone bāʾ and one pine dot, in both themes. */
+  --mark-tile: 21 26 23;
+  --mark-ink: 246 244 237;
+  --mark-line: 246 244 237;
+  --mark-dot: 138 196 168;
+  --mark-edge: 21 26 23;
   color-scheme: light;
 }
 
 .dark {
-  --bg: 10 20 17;
-  --surface: 15 27 23;
-  --raised: 19 34 28;
-  --ink: 233 240 234;
-  --muted: 156 175 164;
-  --line: 39 56 48;
-  --brand: 96 207 156;
-  --brand-ink: 8 20 15;
-  --accent: 226 116 104;
-  --gold: 214 173 106;
+  --bg: 13 17 15;
+  --surface: 19 24 21;
+  --raised: 25 31 27;
+  --ink: 234 236 231;
+  --muted: 154 162 155;
+  --line: 43 50 45;
+  --line-strong: 79 88 81;
+  --brand: 138 196 168;
+  --brand-ink: 12 20 16;
+  --accent: 234 236 231;
+  --gold: 154 162 155;
+  --mark-tile: 21 26 23;
+  --mark-ink: 246 244 237;
+  --mark-line: 246 244 237;
+  --mark-dot: 138 196 168;
+  --mark-edge: 79 88 81;
   color-scheme: dark;
 }
 
@@ -43,18 +62,17 @@ html {
 body {
   background-color: rgb(var(--bg));
   color: rgb(var(--ink));
-  font-feature-settings: "kern" 1, "liga" 1;
+  font-feature-settings: "kern" 1, "liga" 1, "cv11" 1;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
 }
 
 ::selection {
-  background: rgb(var(--brand) / 0.18);
+  background: rgb(var(--brand) / 0.16);
 }
 
-/* Arabic typography: slightly larger, more open leading. */
 [dir="rtl"] body {
-  line-height: 1.85;
+  line-height: 1.9;
   letter-spacing: 0;
 }
 
@@ -74,41 +92,82 @@ p, li {
   .shell {
     @apply mx-auto w-full max-w-shell px-5 sm:px-6 lg:px-8;
   }
+
+  /* A card is a ruled block of paper, not a floating panel. */
   .card {
     @apply rounded-card border border-line bg-surface;
   }
+
   .hairline {
     @apply border-t border-line;
   }
+
+  /* Section kicker: numbered, small caps, wide tracking. */
   .eyebrow {
-    @apply inline-flex items-center gap-2 text-[11px] font-semibold uppercase tracking-[0.14em] text-muted;
+    @apply inline-flex items-center gap-2 text-[10.5px] font-semibold uppercase tracking-[0.18em] text-muted;
   }
+
+  .kicker {
+    @apply inline-flex items-center gap-2 text-[10.5px] font-semibold uppercase tracking-[0.18em] text-muted;
+  }
+
   .btn {
-    @apply inline-flex min-h-11 items-center justify-center gap-2 rounded-full border border-line bg-surface px-5 text-sm font-semibold text-ink transition-colors hover:border-brand hover:text-brand focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand disabled:cursor-not-allowed disabled:opacity-50;
+    @apply inline-flex min-h-11 items-center justify-center gap-2 rounded-card border border-line-strong bg-transparent px-4 text-[13.5px] font-semibold text-ink transition-colors hover:border-ink hover:bg-raised focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand disabled:cursor-not-allowed disabled:opacity-45;
   }
-  .btn-primary {
-    @apply border-brand bg-brand text-brand-ink hover:bg-brand/90 hover:text-brand-ink;
+
+  .btn-primary,
+  .btn-brand {
+    @apply border-brand bg-brand text-brand-ink hover:border-brand hover:bg-brand hover:text-brand-ink;
   }
+
+  .btn-ghost {
+    @apply border-transparent text-muted hover:border-line hover:bg-transparent hover:text-ink;
+  }
+
   .btn-sm {
-    @apply min-h-9 px-4 text-[13px];
+    @apply min-h-9 px-3 text-[12.5px];
   }
+
   .label {
-    @apply mb-1.5 block text-[13px] font-medium text-ink;
+    @apply mb-1.5 block text-[12.5px] font-medium text-ink;
   }
+
   .input {
-    @apply min-h-11 w-full rounded-lg border border-line bg-surface px-3 text-sm text-ink shadow-sm outline-none transition-colors placeholder:text-muted/70 focus:border-brand focus:ring-1 focus:ring-brand;
+    @apply min-h-11 w-full rounded-card border border-line bg-surface px-3 text-sm text-ink outline-none transition-colors placeholder:text-muted/60 focus:border-brand focus:ring-1 focus:ring-brand;
   }
+
   .select {
-    @apply input appearance-none bg-[length:14px] bg-[left_0.75rem_center] bg-no-repeat pr-3 ps-9;
+    @apply input appearance-none bg-[length:13px] bg-[left_0.75rem_center] bg-no-repeat pe-3 ps-9;
   }
+
   .link {
     @apply text-brand underline decoration-brand/30 underline-offset-4 transition-colors hover:decoration-brand;
   }
+
   .chip {
-    @apply inline-flex items-center gap-1.5 whitespace-nowrap rounded-full border border-line bg-raised px-3 py-1 text-xs font-medium text-muted;
+    @apply inline-flex items-center gap-1.5 whitespace-nowrap rounded-card border border-line bg-transparent px-2 py-0.5 text-[11px] font-medium text-muted;
   }
+
+  .chip-brand {
+    @apply border-brand/40 text-brand;
+  }
+
   .num {
-    font-variant-numeric: tabular-nums;
+    font-variant-numeric: tabular-nums lining-nums;
+    font-feature-settings: "tnum" 1;
+  }
+
+  /* Ruled list row */
+  .rule-row {
+    @apply flex items-center justify-between gap-3 border-b border-line py-3 last:border-b-0;
+  }
+
+  /* Tabular data block used on the dashboard */
+  .metric-label {
+    @apply text-[10px] uppercase tracking-[0.14em] text-muted;
+  }
+  .metric-value {
+    @apply num mt-1 block text-2xl font-semibold leading-none text-ink;
   }
 }
 
@@ -124,7 +183,7 @@ table.data td {
   @apply border-b border-line px-3 py-2.5 text-start align-middle;
 }
 table.data thead th {
-  @apply bg-raised text-[11px] font-semibold uppercase tracking-wider text-muted;
+  @apply bg-transparent text-[10.5px] font-semibold uppercase tracking-[0.14em] text-muted;
 }
 table.data tbody tr:last-child td {
   @apply border-b-0;
@@ -149,6 +208,64 @@ summary:focus-visible {
 /* Hide the theme script flash */
 html.no-transition * {
   transition: none !important;
+}
+
+/* A single, quiet entrance for content that appears after mount. */
+@keyframes rule-in {
+  from { opacity: 0; transform: translateY(3px); }
+  to { opacity: 1; transform: none; }
+}
+.animate-in {
+  animation: rule-in 220ms ease-out both;
+}
+
+/* App-like route transition (mobile and desktop). */
+@keyframes page-in {
+  from { opacity: 0; transform: translateY(6px); }
+  to { opacity: 1; transform: none; }
+}
+.page-enter {
+  animation: page-in 200ms ease-out both;
+}
+
+html {
+  -webkit-tap-highlight-color: transparent;
+}
+
+/*
+ * A grid column defaults to `auto`, which means a single wide child (a nowrap
+ * formula, a data table, a long token) can force the column — and therefore the
+ * page — past the viewport. Every grid child may shrink; wide children scroll
+ * or truncate inside their own box instead.
+ */
+.grid > * {
+  min-width: 0;
+}
+
+/* Horizontal scrollers read as app carousels, without a visible scrollbar. */
+.no-scrollbar {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+.snap-x-app {
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+}
+.snap-x-app > * {
+  scroll-snap-align: start;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
 }
 
 @media print {

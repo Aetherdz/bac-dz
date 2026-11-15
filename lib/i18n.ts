@@ -13,7 +13,7 @@ export function isLocale(value: string | undefined): value is Locale {
 }
 
 type Dict = {
-  nav: { home: string; calculator: string; coefficients: string; exams: string; streams: string; guides: string; orientation: string; tools: string; planner: string; updates: string };
+  nav: { home: string; calculator: string; coefficients: string; exams: string; streams: string; guides: string; orientation: string; tools: string; planner: string; study: string; updates: string };
   actions: { calculate: string; reset: string; share: string; copy: string; copied: string; print: string; download: string; save: string; saved: string; clear: string; next: string; back: string; compare: string; addSubject: string; remove: string; search: string; filter: string; all: string };
   common: {
     skipToContent: string;
@@ -221,6 +221,7 @@ const ar: Dict = {
     orientation: "التوجيه الجامعي",
     tools: "الأدوات",
     planner: "مخطط المراجعة",
+    study: "فضاء المراجعة",
     updates: "التحديثات",
   },
   actions: {
@@ -449,6 +450,7 @@ const fr: Dict = {
     orientation: "Orientation",
     tools: "Outils",
     planner: "Planificateur",
+    study: "Espace d’étude",
     updates: "Actualités",
   },
   actions: {
@@ -677,6 +679,7 @@ const en: Dict = {
     orientation: "Orientation",
     tools: "Tools",
     planner: "Planner",
+    study: "Study space",
     updates: "Updates",
   },
   actions: {

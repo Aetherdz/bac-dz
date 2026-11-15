@@ -18,7 +18,16 @@ export type RouteTarget =
   | { name: "tools" }
   | { name: "tool"; tool: string }
   | { name: "orientation" }
+  | { name: "majors"; /** Encoded explore state, e.g. "v/s-mathematiques/p-2". */ view?: string }
+  | { name: "major"; slug: string }
+  | { name: "universities" }
+  | { name: "university"; slug: string }
+  | { name: "recommend" }
   | { name: "planner" }
+  | { name: "countdown" }
+  | { name: "pomodoro" }
+  | { name: "studySpace" }
+  | { name: "tasks" }
   | { name: "updates" }
   | { name: "update"; slug: string }
   | { name: "search" }
@@ -29,7 +38,22 @@ export type RouteTarget =
   | { name: "terms" }
   | { name: "contact" };
 
-type StaticName = Exclude<RouteTarget["name"], "stream" | "examSubject" | "guide" | "tool" | "update">;
+type StaticName = Exclude<
+  RouteTarget["name"],
+  "stream" | "examSubject" | "guide" | "tool" | "update" | "major" | "university"
+>;
+
+const majorsBase: Record<Locale, string> = {
+  ar: "takhassusat-jamiiya",
+  fr: "formations-universitaires",
+  en: "university-majors",
+};
+
+const universitiesBase: Record<Locale, string> = {
+  ar: "jamiyat",
+  fr: "universites",
+  en: "universities",
+};
 
 const staticPaths: Record<StaticName, Record<Locale, string[]>> = {
   home: { ar: [], fr: [], en: [] },
@@ -40,7 +64,14 @@ const staticPaths: Record<StaticName, Record<Locale, string[]>> = {
   guides: { ar: ["dalil"], fr: ["guides"], en: ["guides"] },
   tools: { ar: ["adawat"], fr: ["outils"], en: ["tools"] },
   orientation: { ar: ["tawjih-jamii"], fr: ["orientation-universitaire"], en: ["university-orientation"] },
+  majors: { ar: [majorsBase.ar], fr: [majorsBase.fr], en: [majorsBase.en] },
+  universities: { ar: [universitiesBase.ar], fr: [universitiesBase.fr], en: [universitiesBase.en] },
+  recommend: { ar: ["iqtirah-takhassusat"], fr: ["recommandation-formations"], en: ["major-recommendations"] },
   planner: { ar: ["mudhakkira-muraajaa"], fr: ["planificateur-revision"], en: ["study-planner"] },
+  countdown: { ar: ["adad-tanazuli-bac"], fr: ["compte-a-rebours-bac"], en: ["bac-countdown"] },
+  pomodoro: { ar: ["muaqqit-bomodoro"], fr: ["minuteur-pomodoro"], en: ["pomodoro-timer"] },
+  studySpace: { ar: ["fadaa-muraajaa"], fr: ["espace-etude"], en: ["study-space"] },
+  tasks: { ar: ["mahami-dirasiya"], fr: ["taches-etude"], en: ["study-tasks"] },
   updates: { ar: ["mustajiddat"], fr: ["actualites"], en: ["updates"] },
   about: { ar: ["man-nahnu"], fr: ["a-propos"], en: ["about"] },
   editorial: { ar: ["siyasa-tahrir"], fr: ["charte-editoriale"], en: ["editorial-policy"] },
@@ -69,21 +100,29 @@ const updatesBase: Record<Locale, string> = { ar: "mustajiddat", fr: "actualites
 
 /** Build an internal path (always leading slash, no trailing slash). */
 export function pathFor(locale: Locale, target: RouteTarget): string {
-  const base = `/${locale}`;
+  const root = `/${locale}`;
   switch (target.name) {
     case "stream":
-      return `${base}/${streamBase[locale]}/${target.stream}`;
+      return `${root}/${streamBase[locale]}/${target.stream}`;
     case "examSubject":
-      return `${base}/${examsBase[locale]}/${target.year}/${target.stream}/${target.subject}`;
+      return `${root}/${examsBase[locale]}/${target.year}/${target.stream}/${target.subject}`;
     case "guide":
-      return `${base}/${guidesBase[locale]}/${target.slug}`;
+      return `${root}/${guidesBase[locale]}/${target.slug}`;
     case "tool":
-      return `${base}/${toolsBase[locale]}/${target.tool}`;
+      return `${root}/${toolsBase[locale]}/${target.tool}`;
     case "update":
-      return `${base}/${updatesBase[locale]}/${target.slug}`;
+      return `${root}/${updatesBase[locale]}/${target.slug}`;
+    case "major":
+      return `${root}/${majorsBase[locale]}/${target.slug}`;
+    case "university":
+      return `${root}/${universitiesBase[locale]}/${target.slug}`;
+    case "majors": {
+      const base = `${root}/${majorsBase[locale]}`;
+      return target.view ? `${base}/${target.view}` : base;
+    }
     default: {
       const segs = staticPaths[target.name][locale];
-      return segs.length ? `${base}/${segs.join("/")}` : base;
+      return segs.length ? `${root}/${segs.join("/")}` : root;
     }
   }
 }
@@ -163,6 +202,18 @@ export function matchRoute(rawSegments: string[]): RouteTarget | null {
       if (segs.length === 2) return { name: "update", slug: second };
       return null;
     }
+    if (first === majorsBase[locale]) {
+      if (!second) return { name: "majors" };
+      // Anything after `/v/` is explore state, validated by the majors module.
+      if (second === "v") return { name: "majors", view: segs.slice(1).join("/") };
+      if (segs.length === 2) return { name: "major", slug: second };
+      return null;
+    }
+    if (first === universitiesBase[locale]) {
+      if (!second) return { name: "universities" };
+      if (segs.length === 2) return { name: "university", slug: second };
+      return null;
+    }
   }
 
   return null;
@@ -185,12 +236,22 @@ export function navKey(target: RouteTarget): string {
     case "guide":
       return "guides";
     case "orientation":
+    case "majors":
+    case "major":
+    case "universities":
+    case "university":
+    case "recommend":
       return "orientation";
     case "tools":
     case "tool":
       return "tools";
     case "planner":
       return "planner";
+    case "countdown":
+    case "pomodoro":
+    case "studySpace":
+    case "tasks":
+      return "study";
     default:
       return "home";
   }
@@ -202,5 +263,7 @@ export const siteSections = {
   guidesBase,
   toolsBase,
   updatesBase,
+  majorsBase,
+  universitiesBase,
   staticPaths,
 };

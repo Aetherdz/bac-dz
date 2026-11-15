@@ -40,7 +40,7 @@ export function Badge({
     accent: "border-accent/30 bg-accent/[0.07] text-accent",
   } as const;
   return (
-    <span className={`inline-flex items-center gap-1.5 rounded-full border px-2.5 py-0.5 text-[11px] font-medium ${tones[tone]}`}>
+    <span className={`inline-flex items-center gap-1.5 rounded-card border px-2.5 py-1 text-[10.5px] font-medium uppercase tracking-[0.1em] ${tones[tone]}`}>
       {children}
     </span>
   );

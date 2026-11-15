@@ -2,6 +2,7 @@ import Link from "next/link";
 import { getDict, type Locale } from "@/lib/i18n";
 import { pathFor } from "@/lib/routes";
 import { SITE } from "@/lib/seo";
+import { BrandMark } from "./brand-mark";
 
 export function SiteFooter({ locale }: { locale: Locale }) {
   const dict = getDict(locale);
@@ -25,7 +26,16 @@ export function SiteFooter({ locale }: { locale: Locale }) {
         { label: dict.nav.orientation, href: pathFor(locale, { name: "orientation" }) },
         { label: dict.nav.planner, href: pathFor(locale, { name: "planner" }) },
         { label: dict.nav.tools, href: pathFor(locale, { name: "tools" }) },
-        { label: dict.nav.home, href: pathFor(locale, { name: "updates" }) },
+        { label: dict.nav.updates, href: pathFor(locale, { name: "updates" }) },
+      ],
+    },
+    {
+      title: dict.nav.study,
+      links: [
+        { label: dict.nav.study, href: pathFor(locale, { name: "studySpace" }) },
+        { label: locale === "ar" ? "عدّاد البكالوريا" : locale === "fr" ? "Compte à rebours" : "Bac countdown", href: pathFor(locale, { name: "countdown" }) },
+        { label: locale === "ar" ? "مؤقت بومودورو" : locale === "fr" ? "Minuteur Pomodoro" : "Pomodoro timer", href: pathFor(locale, { name: "pomodoro" }) },
+        { label: locale === "ar" ? "مهام الدراسة" : locale === "fr" ? "Tâches d’étude" : "Study tasks", href: pathFor(locale, { name: "tasks" }) },
       ],
     },
     {
@@ -35,11 +45,6 @@ export function SiteFooter({ locale }: { locale: Locale }) {
         { label: dict.trust.editorialTitle, href: pathFor(locale, { name: "editorial" }) },
         { label: dict.trust.correctionsTitle, href: pathFor(locale, { name: "corrections" }) },
         { label: dict.trust.contactTitle, href: pathFor(locale, { name: "contact" }) },
-      ],
-    },
-    {
-      title: dict.footer.legal,
-      links: [
         { label: dict.trust.privacyTitle, href: pathFor(locale, { name: "privacy" }) },
         { label: dict.trust.termsTitle, href: pathFor(locale, { name: "terms" }) },
       ],
@@ -47,27 +52,25 @@ export function SiteFooter({ locale }: { locale: Locale }) {
   ];
 
   return (
-    <footer className="mt-20 border-t border-line bg-surface">
+    <footer className="mt-20 border-t border-line-strong bg-bg">
       <div className="shell py-12">
-        <div className="grid gap-10 md:grid-cols-[1.4fr_repeat(4,1fr)]">
+        <div className="grid gap-10 md:grid-cols-[1.25fr_repeat(4,1fr)]">
           <div className="max-w-xs">
-            <div className="flex items-center gap-2.5">
-              <span className="grid h-9 w-9 place-items-center rounded-[10px] bg-brand font-display text-[15px] font-bold text-brand-ink">
-                ب
-              </span>
-              <span className="font-display text-[16px] font-bold tracking-tight text-ink">BAC&nbsp;DZ</span>
+            <div className="flex items-baseline gap-2.5">
+              <BrandMark className="h-8 w-8 shrink-0" title={null} />
+              <span className="font-display text-[19px] font-bold tracking-tight text-ink">BAC&nbsp;DZ</span>
             </div>
-            <p className="mt-3 text-[12.5px] leading-6 text-muted">{dict.footer.tagline}</p>
+            <p className="mt-4 text-[12.5px] leading-6 text-muted">{dict.footer.tagline}</p>
             <p className="mt-3 text-[11.5px] leading-5 text-muted/80">{SITE.tagline[locale]}</p>
           </div>
 
           {columns.map((column) => (
             <nav key={column.title} aria-label={column.title}>
-              <h2 className="mb-3 text-[11px] font-semibold uppercase tracking-[0.12em] text-muted">{column.title}</h2>
+              <h2 className="mb-3 border-b border-line pb-2 text-[10px] font-semibold uppercase tracking-[0.16em] text-muted">{column.title}</h2>
               <ul className="space-y-2">
                 {column.links.map((link) => (
                   <li key={link.href}>
-                    <Link href={link.href} className="text-[13px] text-ink/80 hover:text-brand">
+                    <Link href={link.href} className="text-[12.5px] text-ink/80 hover:text-brand">
                       {link.label}
                     </Link>
                   </li>

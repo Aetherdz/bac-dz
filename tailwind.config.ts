@@ -12,6 +12,7 @@ const config: Config = {
         ink: "rgb(var(--ink) / <alpha-value>)",
         muted: "rgb(var(--muted) / <alpha-value>)",
         line: "rgb(var(--line) / <alpha-value>)",
+        "line-strong": "rgb(var(--line-strong) / <alpha-value>)",
         brand: "rgb(var(--brand) / <alpha-value>)",
         "brand-ink": "rgb(var(--brand-ink) / <alpha-value>)",
         accent: "rgb(var(--accent) / <alpha-value>)",
@@ -19,23 +20,23 @@ const config: Config = {
       },
       fontFamily: {
         sans: ["var(--font-sans)", "IBM Plex Sans Arabic", "Segoe UI", "Tahoma", "sans-serif"],
-        display: ["var(--font-display)", "var(--font-sans)", "Georgia", "serif"],
+        display: ["var(--font-display)", "Amiri", "Georgia", "serif"],
       },
       maxWidth: {
-        shell: "1180px",
+        shell: "1240px",
         prose: "68ch",
       },
       borderRadius: {
-        card: "10px",
+        card: "2px",
       },
       boxShadow: {
-        lift: "0 1px 0 rgb(var(--ink) / 0.04), 0 12px 30px -18px rgb(var(--ink) / 0.28)",
+        none: "none",
       },
       keyframes: {
-        in: { from: { opacity: "0", transform: "translateY(4px)" }, to: { opacity: "1", transform: "none" } },
+        in: { from: { opacity: "0", transform: "translateY(3px)" }, to: { opacity: "1", transform: "none" } },
       },
       animation: {
-        in: "in 180ms ease-out both",
+        in: "in 220ms ease-out both",
       },
     },
   },

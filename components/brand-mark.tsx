@@ -1,0 +1,61 @@
+import type { CSSProperties } from "react";
+
+/**
+ * The brand mark: a seal holding the Arabic letter bāʾ in Amiri Bold, the
+ * session year set beneath a hairline rule, and the letter's own dot in the
+ * pine accent. The dot is the only ornament — the diacritic carries the brand
+ * colour — so the mark reads as a stamp for "bac 2027" rather than a rounded
+ * app icon. The year is replaced when the session moves on.
+ *
+ * Geometry is drawn on a 32-unit grid; colours come from the `--mark-*` tokens
+ * in globals.css, so the seal stays an ink tile in both themes.
+ */
+
+/** bāʾ, Amiri Bold, 1000 units per em (contours: body, dot). */
+const GLYPH = "M92 74Q43 135 76 229Q83 248 96.0 268.5Q109 289 128 311Q142 326 152 316Q163 306 149 292Q113 254 119 221Q138 106 419 106Q538 106 636.5 127.5Q735 149 813 193Q804 231 769 261Q760 270 765 285L794 373Q803 401 825 367Q876 288 857 173Q847 117 814 96Q732 44 632.5 14.5Q533 -15 415 -21Q179 -33 92 74Z";
+const DOT = "M466 -133Q472 -125 483 -128Q503 -135 521.5 -146.0Q540 -157 556 -171Q564 -179 559 -189L511 -265Q504 -275 493 -267Q483 -259 421 -222Q410 -215 417 -205Z";
+
+/** 2027, IBM Plex Sans Arabic Bold, 2610 units of total advance. */
+const YEAR = "M551 0H57V137L272 321Q301 346 321.0 366.5Q341 387 353.5 406.5Q366 426 371.5 445.0Q377 464 377 486V500Q377 520 369.0 535.0Q361 550 348.0 560.0Q335 570 318.5 575.0Q302 580 285 580Q260 580 241.5 572.0Q223 564 209.5 550.5Q196 537 187.0 519.5Q178 502 173 482L42 532Q54 568 75.0 600.5Q96 633 127.5 657.5Q159 682 202.0 696.0Q245 710 299 710Q356 710 400.0 694.0Q444 678 474.5 650.0Q505 622 521.0 583.5Q537 545 537 500Q537 455 522.0 418.0Q507 381 481.5 348.5Q456 316 422.0 287.0Q388 258 351 228L221 126H551Z M970 -12Q833 -12 767.0 83.0Q701 178 701 349Q701 520 767.0 615.0Q833 710 970 710Q1107 710 1173.0 615.0Q1239 520 1239 349Q1239 178 1173.0 83.0Q1107 -12 970 -12ZM970 115Q1030 115 1053.0 159.0Q1076 203 1076 283V415Q1076 495 1053.0 539.0Q1030 583 970 583Q910 583 887.0 539.0Q864 495 864 415V283Q864 203 887.0 159.0Q910 115 970 115Z M1891 0H1397V137L1612 321Q1641 346 1661.0 366.5Q1681 387 1693.5 406.5Q1706 426 1711.5 445.0Q1717 464 1717 486V500Q1717 520 1709.0 535.0Q1701 550 1688.0 560.0Q1675 570 1658.5 575.0Q1642 580 1625 580Q1600 580 1581.5 572.0Q1563 564 1549.5 550.5Q1536 537 1527.0 519.5Q1518 502 1513 482L1382 532Q1394 568 1415.0 600.5Q1436 633 1467.5 657.5Q1499 682 1542.0 696.0Q1585 710 1639 710Q1696 710 1740.0 694.0Q1784 678 1814.5 650.0Q1845 622 1861.0 583.5Q1877 545 1877 500Q1877 455 1862.0 418.0Q1847 381 1821.5 348.5Q1796 316 1762.0 287.0Q1728 258 1691 228L1561 126H1891Z M2176 0 2410 576H2192V449H2065V698H2559V568L2334 0Z";
+
+export function BrandMark({
+  className = "",
+  style,
+  title = "BAC DZ",
+}: {
+  className?: string;
+  style?: CSSProperties;
+  /** Accessible name. Pass `null` when the mark sits next to a visible wordmark. */
+  title?: string | null;
+}) {
+  return (
+    <svg
+      viewBox="0 0 32 32"
+      className={className}
+      style={style}
+      role={title ? "img" : "presentation"}
+      aria-label={title ?? undefined}
+      aria-hidden={title ? undefined : true}
+    >
+      <rect width="32" height="32" rx="2" fill="rgb(var(--mark-tile))" />
+      <rect
+        x="0.5"
+        y="0.5"
+        width="31"
+        height="31"
+        rx="1.5"
+        fill="none"
+        stroke="rgb(var(--mark-edge))"
+        strokeWidth="1"
+      />
+      <g transform="translate(5.7035 13.2813) scale(0.022266 -0.022266)">
+        <path d={GLYPH} fill="rgb(var(--mark-ink))" />
+        <path d={DOT} fill="rgb(var(--mark-dot))" />
+      </g>
+      <path d="M9 22.4H23" stroke="rgb(var(--mark-line))" strokeOpacity="0.3" strokeWidth="0.6" />
+      <g transform="translate(10.500 27.4) scale(0.004215 -0.004215)">
+        <path d={YEAR} fill="rgb(var(--mark-ink))" />
+      </g>
+    </svg>
+  );
+}

@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from "next";
-import { IBM_Plex_Sans_Arabic, Newsreader } from "next/font/google";
+import { Amiri, IBM_Plex_Sans_Arabic } from "next/font/google";
 import { notFound } from "next/navigation";
 import "../../globals.css";
 import { getDict, isLocale, localeMeta, locales, type Locale } from "@/lib/i18n";
@@ -7,6 +7,9 @@ import { SITE, siteUrl } from "@/lib/seo";
 import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
 import { JsonLd, organizationSchema, websiteSchema } from "@/components/jsonld";
+import { PomodoroProvider } from "@/components/study/pomodoro-context";
+import { MobileTabBar } from "@/components/mobile-tabbar";
+import { PageTransition } from "@/components/page-transition";
 
 const sans = IBM_Plex_Sans_Arabic({
   subsets: ["arabic", "latin"],
@@ -15,9 +18,11 @@ const sans = IBM_Plex_Sans_Arabic({
   display: "swap",
 });
 
-const display = Newsreader({
-  subsets: ["latin"],
-  weight: ["500", "600", "700"],
+// Amiri carries both Arabic and Latin display text; it is the editorial face
+// for headlines on every locale, so the site reads as one publication.
+const display = Amiri({
+  subsets: ["arabic", "latin"],
+  weight: ["400", "700"],
   variable: "--font-display",
   display: "swap",
 });
@@ -25,9 +30,10 @@ const display = Newsreader({
 export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
+  viewportFit: "cover",
   themeColor: [
-    { media: "(prefers-color-scheme: light)", color: "#F6F4EC" },
-    { media: "(prefers-color-scheme: dark)", color: "#0A1411" },
+    { media: "(prefers-color-scheme: light)", color: "#F6F4ED" },
+    { media: "(prefers-color-scheme: dark)", color: "#0D110F" },
   ],
 };
 
@@ -42,6 +48,7 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
     creator: SITE.name,
     publisher: SITE.name,
     formatDetection: { telephone: false },
+    appleWebApp: { capable: true, title: "BAC DZ", statusBarStyle: "default" },
     other: {
       "google-site-verification": process.env.NEXT_PUBLIC_GSC_VERIFICATION ?? "",
     },
@@ -75,18 +82,21 @@ export default async function LocaleLayout({
           />
         ) : null}
       </head>
-      <body className="min-h-dvh bg-bg font-sans text-ink antialiased">
+      <body className="min-h-dvh bg-bg pb-[calc(56px+env(safe-area-inset-bottom))] font-sans text-ink antialiased lg:pb-0">
         <a
           href="#main"
-          className="sr-only focus:not-sr-only focus:fixed focus:start-4 focus:top-4 focus:z-50 focus:rounded-full focus:bg-brand focus:px-5 focus:py-3 focus:text-sm focus:font-semibold focus:text-brand-ink"
+          className="sr-only focus:not-sr-only focus:fixed focus:start-4 focus:top-4 focus:z-50 focus:rounded-card focus:bg-brand focus:px-5 focus:py-3 focus:text-sm focus:font-semibold focus:text-brand-ink"
         >
           {dict.common.skipToContent}
         </a>
         <SiteHeader locale={typed} />
-        <main id="main" tabIndex={-1}>
-          {children}
-        </main>
+        <PomodoroProvider locale={typed}>
+          <main id="main" tabIndex={-1}>
+            <PageTransition>{children}</PageTransition>
+          </main>
+        </PomodoroProvider>
         <SiteFooter locale={typed} />
+        <MobileTabBar locale={typed} />
         <JsonLd data={organizationSchema()} />
         <JsonLd data={websiteSchema(typed)} />
       </body>

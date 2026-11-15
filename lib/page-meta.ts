@@ -4,6 +4,20 @@ import { streamById, subjectById } from "@/content/bac";
 import { getGuide } from "@/content/guides";
 import { toolBySlug } from "@/content/tools";
 import { updateBySlug } from "@/content/updates";
+import {
+  datasetStats,
+  renderableMajorBySlug,
+  renderableThresholds,
+  renderableUniversityBySlug,
+  thresholdsForMajorSlug,
+} from "@/lib/majors/dataset";
+import { exploreSummary, parseExploreView } from "@/lib/majors/route";
+
+const majorsShortLabel: Record<Locale, string> = {
+  ar: "دليل التخصصات الجامعية",
+  fr: "Formations universitaires",
+  en: "University majors",
+};
 
 export type PageMeta = {
   title: string;
@@ -156,6 +170,91 @@ const staticMeta: Record<
       ogTitle: "University orientation simulator",
     },
   },
+  majors: {
+    ar: {
+      title: `دليل التخصصات الجامعية — ${datasetStats.majors} تكوينات موثقة بمعدلات 2026`,
+      description: `فهرس التكوينات التي تنشر لها وزارة التعليم العالي معدلًا أدنى لسنة 2026: الاسم، المؤسسة، الرقم المنشور، وتاريخ التحقق. ${datasetStats.majors} تكوينات و${datasetStats.thresholdFigures} رقمًا منشورًا، ولا نعرض أي تكوين غير موثق.`,
+      ogTitle: "University majors index",
+    },
+    fr: {
+      title: `Formations universitaires — ${datasetStats.majors} fiches vérifiées, minima 2026`,
+      description: `Index des formations pour lesquelles le ministère publie un minimum 2026 : nom, établissement, chiffre publié et date de vérification. ${datasetStats.majors} formations, ${datasetStats.thresholdFigures} chiffres publiés, aucune fiche non vérifiée.`,
+      ogTitle: "University majors index",
+    },
+    en: {
+      title: `University majors — ${datasetStats.majors} verified profiles, 2026 minima`,
+      description: `Index of the programs for which the ministry publishes a 2026 minimum: name, institution, published figure and verification date. ${datasetStats.majors} programs, ${datasetStats.thresholdFigures} published figures, no unverified profile.`,
+      ogTitle: "University majors index",
+    },
+  },
+  universities: {
+    ar: {
+      title: `المؤسسات الجامعية في جدول 2026 — ${datasetStats.universities} مؤسسة موثقة`,
+      description: `المؤسسات التي نشرت لها الوزارة معدلات دنيا لسنة 2026، بأسمائها كما وردت في الجدول الرسمي، مع التكوينات المرتبطة بكل مؤسسة. لا نضيف مدينة أو موقعًا لا يذكره المصدر.`,
+      ogTitle: "Universities in the 2026 table",
+    },
+    fr: {
+      title: `Universités du tableau 2026 — ${datasetStats.universities} établissements vérifiés`,
+      description: `Les établissements pour lesquels le ministère publie un minimum 2026, nommés comme dans le tableau officiel, avec les formations rattachées. Aucune ville ni site ajouté hors source.`,
+      ogTitle: "Universities in the 2026 table",
+    },
+    en: {
+      title: `Universities in the 2026 table — ${datasetStats.universities} verified institutions`,
+      description: `The institutions for which the ministry publishes a 2026 minimum, named as in the official table, with their linked programs. No city or website added beyond the source.`,
+      ogTitle: "Universities in the 2026 table",
+    },
+  },
+  major: {
+    ar: {
+      title: "بطاقة تكوين جامعي — ما ينشره الجدول الرسمي لسنة 2026",
+      description: "بطاقة مرجعية لتكوين جامعي: الاسم، المؤسسة، والأرقام المنشورة في الجدول الرسمي لسنة 2026 مع تاريخ التحقق. المعدل التاريخي ليس شرط أهلية للسنة القادمة.",
+      ogTitle: "University major profile",
+    },
+    fr: {
+      title: "Fiche de formation universitaire — ce que publie le tableau 2026",
+      description: "Fiche de référence : intitulé, établissement et chiffres publiés dans le tableau officiel 2026, avec date de vérification. Un minimum historique n’est pas une condition d’admission.",
+      ogTitle: "University major profile",
+    },
+    en: {
+      title: "University major profile — what the 2026 table publishes",
+      description: "A reference profile: name, institution and the figures published in the official 2026 table, with a verification date. A historical minimum is not an eligibility rule.",
+      ogTitle: "University major profile",
+    },
+  },
+  university: {
+    ar: {
+      title: "مؤسسة جامعية — التكوينات والمعدلات المنشورة لسنة 2026",
+      description: "صفحة مؤسسة جامعية تجمع التكوينات التي نشرت لها الوزارة معدلًا أدنى لسنة 2026، مع المصدر وتاريخ التحقق.",
+      ogTitle: "University profile",
+    },
+    fr: {
+      title: "Établissement universitaire — formations et minima publiés 2026",
+      description: "Page d’établissement regroupant les formations pour lesquelles le ministère publie un minimum 2026, avec source et date de vérification.",
+      ogTitle: "University profile",
+    },
+    en: {
+      title: "University — programs and published 2026 minima",
+      description: "An institution page grouping the programs for which the ministry publishes a 2026 minimum, with source and verification date.",
+      ogTitle: "University profile",
+    },
+  },
+  recommend: {
+    ar: {
+      title: "اختر تخصصك في 6 خطوات — مطابق، ممكن، بعيد، استكشاف",
+      description: "معالج من ست خطوات يقارن معدلك بالحد الأدنى المنشور لسنة 2026 ويصنّف التكوينات في أربع مجموعات، مع سبب مكتوب لكل تصنيف. مقارنة تاريخية، لا وعد بقبول.",
+      ogTitle: "Major recommendation wizard",
+    },
+    fr: {
+      title: "Choisir sa formation en 6 étapes — acquis, possible, éloigné, explorer",
+      description: "Un assistant en six étapes compare votre moyenne aux minima publiés 2026 et classe les formations en quatre groupes, avec une raison écrite pour chaque classement. Comparaison historique, sans promesse d’admission.",
+      ogTitle: "Major recommendation wizard",
+    },
+    en: {
+      title: "Choose a major in 6 steps — match, reachable, stretch, explore",
+      description: "A six-step wizard compares your average with the published 2026 minima and sorts programs into four buckets, each with a written reason. A historical comparison, not an admission promise.",
+      ogTitle: "Major recommendation wizard",
+    },
+  },
   planner: {
     ar: {
       title: "مخطط المراجعة — جدول أسبوعي حسب شعبتك ووقتك",
@@ -171,6 +270,74 @@ const staticMeta: Record<
       title: "Study planner — weekly schedule by stream",
       description: "Build a weekly plan weighted by coefficients, track progress and export it as ICS. Everything stays in your browser.",
       ogTitle: "Study planner",
+    },
+  },
+  countdown: {
+    ar: {
+      title: "عدّاد البكالوريا 2027 — الوقت المتبقي بتوقيت الجزائر",
+      description: "عدّاد مباشر يعمل كل ثانية بتوقيت الجزائر حتى دورة 2027: موعد تقديري موسوم بقاعدة معلنة (أول أحد من جوان) يُستبدل بالتاريخ الرسمي فور نشره.",
+      ogTitle: "Bac countdown",
+    },
+    fr: {
+      title: "Compte à rebours du bac 2027 — temps restant, heure d’Alger",
+      description: "Compte à rebours actualisé chaque seconde au fuseau d’Alger : estimation signalée (1er dimanche de juin) pour 2027, remplacée par la date officielle dès publication.",
+      ogTitle: "Bac countdown",
+    },
+    en: {
+      title: "Bac 2027 countdown — time left on Algiers time",
+      description: "A live countdown refreshed every second on Algiers time for the 2027 session: a labelled estimate (first Sunday of June) replaced by the official date once published.",
+      ogTitle: "Bac countdown",
+    },
+  },
+  pomodoro: {
+    ar: {
+      title: "مؤقت بومودورو للمراجعة — 25/5 مع إحصاءات محلية",
+      description: "مؤقت تركيز يعمل في متصفحك: جلسة 25 دقيقة، راحة 5، راحة طويلة كل 4 جلسات. يستمر أثناء تنقّلك بين الصفحات ويُحفظ دون حساب.",
+      ogTitle: "Pomodoro timer",
+    },
+    fr: {
+      title: "Minuteur Pomodoro pour réviser — 25/5 avec statistiques locales",
+      description: "Un minuteur de concentration dans votre navigateur : 25 minutes de focus, 5 de pause, pause longue toutes les 4. Il survit à la navigation, sans compte.",
+      ogTitle: "Pomodoro timer",
+    },
+    en: {
+      title: "Pomodoro timer for revision — 25/5 with local statistics",
+      description: "A browser focus timer: 25-minute blocks, 5-minute breaks, a long break every four. It keeps running across pages, with no account.",
+      ogTitle: "Pomodoro timer",
+    },
+  },
+  studySpace: {
+    ar: {
+      title: "فضاء المراجعة — لوحة متابعة الدراسة اليومية والأسبوعية",
+      description: "لوحة واحدة تجمع العدّاد، مؤقت التركيز، مهام اليوم، ودقائق الدراسة في آخر سبعة أيام. أرقام حقيقية فقط، محفوظة في متصفحك.",
+      ogTitle: "My study space",
+    },
+    fr: {
+      title: "Mon espace d’étude — tableau de bord quotidien et hebdomadaire",
+      description: "Un seul tableau : compte à rebours, minuteur, tâches du jour et minutes d’étude des sept derniers jours. Uniquement des chiffres réels, stockés dans votre navigateur.",
+      ogTitle: "My study space",
+    },
+    en: {
+      title: "My study space — daily and weekly study dashboard",
+      description: "One board: countdown, focus timer, today’s tasks and the last seven days of study minutes. Real figures only, stored in your browser.",
+      ogTitle: "My study space",
+    },
+  },
+  tasks: {
+    ar: {
+      title: "مهام الدراسة اليومية — تنظيم وإنجاز دون تسجيل",
+      description: "أضف مهامك بالمادة والدرس والأولوية والمدة، علّمها كمنجزة، وتابع نسبة إنجاز اليوم وآخر سبعة أيام. كل شيء محلي.",
+      ogTitle: "Study tasks",
+    },
+    fr: {
+      title: "Tâches d’étude du jour — organiser et finir sans inscription",
+      description: "Ajoutez vos tâches par matière, leçon, priorité et durée, marquez-les faites et suivez l’avancement du jour et des sept derniers jours. Tout est local.",
+      ogTitle: "Study tasks",
+    },
+    en: {
+      title: "Daily study tasks — organise and finish without signing up",
+      description: "Add tasks with subject, lesson, priority and estimate, mark them done and track today’s completion plus the last seven days. All local.",
+      ogTitle: "Study tasks",
     },
   },
   updates: {
@@ -316,6 +483,93 @@ const staticMeta: Record<
 
 export function metaFor(locale: Locale, target: RouteTarget): PageMeta {
   switch (target.name) {
+    case "majors": {
+      if (!target.view) return { ...staticMeta.majors[locale] };
+      const tokens = target.view.split("/");
+      const state = tokens[0] === "v" ? parseExploreView(tokens.slice(1)) : null;
+      if (!state) return { ...staticMeta.majors[locale] };
+      const summary = exploreSummary(state, locale);
+      const parts = [summary.stream, summary.field, summary.university, summary.average && `≥ ${summary.average}/20`]
+        .filter(Boolean)
+        .join(" · ");
+      const label =
+        locale === "ar"
+          ? `تصفية: ${parts || "بلا عامل"}${state.page > 1 ? ` — صفحة ${state.page}` : ""}`
+          : locale === "fr"
+            ? `Filtre : ${parts || "aucun"}${state.page > 1 ? ` — page ${state.page}` : ""}`
+            : `Filter: ${parts || "none"}${state.page > 1 ? ` — page ${state.page}` : ""}`;
+      return {
+        title: `${staticMeta.majors[locale].title.split(" — ")[0]} — ${label}`,
+        description:
+          locale === "ar"
+            ? "نتيجة تصفية داخل دليل التخصصات. هذه الصفحة لا تُفهرس؛ الصفحة المرجعية هي دليل التخصصات دون عوامل تصفية."
+            : locale === "fr"
+              ? "Résultat filtré de l’index des formations. Cette page n’est pas indexée ; la page de référence est l’index sans filtre."
+              : "A filtered view of the majors index. This page is not indexed; the reference page is the unfiltered index.",
+        ogTitle: "University majors — filtered view",
+        noindex: true,
+      };
+    }
+    case "major": {
+      const major = renderableMajorBySlug[target.slug];
+      if (!major) return { ...staticMeta.majors[locale] };
+      const figures = thresholdsForMajorSlug(major.slug);
+      const lowest = figures.length > 0 ? figures[0] : null;
+      const name = major.name[locale] ?? major.name.fr;
+      const number = lowest && lowest.value !== null ? lowest.value.toFixed(2) : null;
+      return {
+        title:
+          locale === "ar"
+            ? `${name} — المعدلات المنشورة لسنة 2026 والمصدر`
+            : locale === "fr"
+              ? `${name} — minima publiés 2026 et source`
+              : `${name} — published 2026 minima and source`,
+        description:
+          number === null
+            ? locale === "ar"
+              ? `${name}: صفحة مرجعية توضح ما ينشره الجدول الرسمي لسنة 2026 وما هو تحريري. لا يوجد رقم منشور مرتبط بهذا التكوين.`
+              : locale === "fr"
+                ? `${name} : fiche de référence distinguant ce que publie le tableau 2026 et ce qui est éditorial. Aucun chiffre publié n’est rattaché à cette formation.`
+                : `${name}: a reference page separating what the 2026 table publishes from editorial content. No published figure is attached to this program.`
+            : locale === "ar"
+              ? `${name}: ${figures.length} رقمًا منشورًا لسنة 2026، أدناها ${number}/20. المعدل التاريخي ليس شرط أهلية للسنة القادمة.`
+              : locale === "fr"
+                ? `${name} : ${figures.length} chiffres publiés en 2026, le plus bas à ${number}/20. Un minimum historique n’est pas une condition d’admission pour l’année suivante.`
+                : `${name}: ${figures.length} figures published in 2026, the lowest at ${number}/20. A historical minimum is not next year’s eligibility rule.`,
+        ogTitle: `${major.name.en ?? major.name.fr} — 2026 minima`,
+        type: "article",
+        updated: major.lastVerifiedAt ?? undefined,
+      };
+    }
+    case "universities": {
+      return { ...staticMeta.universities[locale] };
+    }
+    case "university": {
+      const university = Object.values(renderableMajorBySlug).length >= 0
+        ? // Local import avoided: the university index is small and lives in the dataset.
+          (require("@/lib/majors/dataset") as typeof import("@/lib/majors/dataset")).renderableUniversityBySlug[target.slug]
+        : undefined;
+      if (!university) return { ...staticMeta.universities[locale] };
+      const name = university.name[locale] ?? university.name.fr;
+      const figures = renderableThresholds.filter((record) => record.universityId === university.id);
+      return {
+        title:
+          locale === "ar"
+            ? `${name} — التكوينات والمعدلات المنشورة لسنة 2026`
+            : locale === "fr"
+              ? `${name} — formations et minima publiés en 2026`
+              : `${name} — programs and published 2026 minima`,
+        description:
+          locale === "ar"
+            ? `${name}: ${figures.length} رقمًا منشورًا في جدول 2026، مع اسم المؤسسة كما ورد في المصدر الرسمي.`
+            : locale === "fr"
+              ? `${name} : ${figures.length} chiffres publiés dans le tableau 2026, avec le nom de l’établissement tel qu’il figure à la source officielle.`
+              : `${name}: ${figures.length} figures published in the 2026 table, with the institution name as printed in the official source.`,
+        ogTitle: `${university.name.en ?? university.name.fr} — 2026 minima`,
+        type: "article",
+        updated: university.lastVerifiedAt ?? undefined,
+      };
+    }
     case "stream": {
       const stream = streamById[target.stream as keyof typeof streamById];
       if (!stream) return staticMeta.home[locale];
@@ -388,6 +642,35 @@ export function metaFor(locale: Locale, target: RouteTarget): PageMeta {
   }
 }
 
+/**
+ * Static routes that are actually served by the catch-all. Kept as an explicit
+ * allowlist: a metadata entry alone must never put a URL into the sitemap or
+ * generateStaticParams. The majors cluster joins this list when its pages ship.
+ */
+const SERVED_STATIC: Exclude<RouteTarget["name"], "stream" | "examSubject" | "guide" | "tool" | "update">[] = [
+  "home",
+  "calculator",
+  "coefficients",
+  "streams",
+  "exams",
+  "guides",
+  "tools",
+  "orientation",
+  "planner",
+  "countdown",
+  "pomodoro",
+  "studySpace",
+  "tasks",
+  "updates",
+  "search",
+  "about",
+  "editorial",
+  "corrections",
+  "privacy",
+  "terms",
+  "contact",
+];
+
 export function staticRouteNames() {
-  return Object.keys(staticMeta) as Exclude<RouteTarget["name"], "stream" | "examSubject" | "guide" | "tool" | "update">[];
+  return SERVED_STATIC.filter((name) => name in staticMeta);
 }

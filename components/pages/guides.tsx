@@ -96,8 +96,8 @@ export function GuidePage({ locale, slug }: { locale: Locale; slug: string }) {
           label={dict.common.home}
         />
 
-        <div className="grid gap-10 lg:grid-cols-[minmax(0,1fr)_260px]">
-          <article>
+        <div className="grid grid-cols-1 gap-10 lg:grid-cols-[minmax(0,1fr)_260px]">
+          <article className="min-w-0">
             <div className="flex flex-wrap items-center gap-2">
               <Badge tone="brand">{guideCategories[guide.category][locale]}</Badge>
               <Badge tone="neutral">

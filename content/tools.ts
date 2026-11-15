@@ -9,7 +9,6 @@ import type { Localized } from "./bac";
  * are rendered by the generic `tool` route.
  */
 export type ToolSlug =
-  | "bac-countdown"
   | "weighted-average"
   | "study-time"
   | "revision-timetable"
@@ -26,20 +25,6 @@ export type ToolEntry = {
 };
 
 export const tools: ToolEntry[] = [
-  {
-    slug: "bac-countdown",
-    title: { ar: "عدّاد البكالوريا", fr: "Compte à rebours du bac", en: "Bac countdown" },
-    description: {
-      ar: "عدد الأيام المتبقية حتى تاريخ الامتحان، مع إمكانية تعديل التاريخ لأن الموعد الرسمي لدورة 2027 لم يُعلن بعد.",
-      fr: "Jours restants avant l’examen, avec une date modifiable car le calendrier officiel 2027 n’est pas encore publié.",
-      en: "Days left before the exam, with an editable date because the official 2027 calendar is not published yet.",
-    },
-    note: {
-      ar: "التاريخ الافتراضي تقديري فقط، وليس موعدًا رسميًا.",
-      fr: "La date par défaut est indicative, pas une date officielle.",
-      en: "The default date is indicative, not an official date.",
-    },
-  },
   {
     slug: "weighted-average",
     title: { ar: "حاسبة المعدل الموزون", fr: "Moyenne pondérée", en: "Weighted average" },

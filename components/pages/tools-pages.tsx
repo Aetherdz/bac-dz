@@ -11,7 +11,7 @@ import { Breadcrumbs } from "@/components/breadcrumbs";
 import { SourceList, VerifiedStamp } from "@/components/source-list";
 import { JsonLd, faqSchema, softwareAppSchema, webPageSchema } from "@/components/jsonld";
 import { PageShell } from "./core";
-import { BacCountdown, ImprovementCalculator, StudyTimeCalculator, WeightedAverage } from "@/components/tools/misc-tools";
+import { ImprovementCalculator, StudyTimeCalculator, WeightedAverage } from "@/components/tools/misc-tools";
 import { TimetableGenerator } from "@/components/tools/planner";
 import { ScoreSimulator } from "@/components/tools/score-simulator";
 import { ScientificCalculator } from "@/components/tools/scientific-calculator";
@@ -20,7 +20,6 @@ import { StudyPlanner } from "@/components/tools/planner";
 import { IconArrow, IconCalculator, IconCalendar, IconCompass, IconWrench } from "@/components/icons";
 
 const toolIcons: Record<string, React.ReactNode> = {
-  "bac-countdown": <IconCalendar size={18} />,
   "weighted-average": <IconCalculator size={18} />,
   "study-time": <IconWrench size={18} />,
   "revision-timetable": <IconCalendar size={18} />,
@@ -174,8 +173,6 @@ export function ToolPage({ locale, slug }: { locale: Locale; slug: string }) {
 function ToolBody({ locale, slug }: { locale: Locale; slug: string }) {
   const dict = getDict(locale);
   switch (slug) {
-    case "bac-countdown":
-      return <BacCountdown locale={locale} />;
     case "weighted-average":
       return <WeightedAverage locale={locale} />;
     case "study-time":

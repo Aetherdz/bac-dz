@@ -15,6 +15,7 @@ import { CalculatorPage, CoefficientsPage, StreamPage, StreamsPage } from "@/com
 import { ExamSubjectPage, ExamsPage } from "@/components/pages/exams";
 import { GuidePage, GuidesPage, UpdatePage, UpdatesPage } from "@/components/pages/guides";
 import { OrientationPage, PlannerPage, ToolPage, ToolsPage } from "@/components/pages/tools-pages";
+import { CountdownPage, PomodoroPage, StudySpacePage, TasksPage } from "@/components/pages/study";
 import { TrustPage } from "@/components/pages/misc";
 import { Suspense } from "react";
 import { SearchClient } from "@/components/search-client";
@@ -99,6 +100,14 @@ export default async function LocalizedPage({ params }: { params: Promise<Params
       return <OrientationPage locale={locale} />;
     case "planner":
       return <PlannerPage locale={locale} />;
+    case "countdown":
+      return <CountdownPage locale={locale} />;
+    case "pomodoro":
+      return <PomodoroPage locale={locale} />;
+    case "studySpace":
+      return <StudySpacePage locale={locale} />;
+    case "tasks":
+      return <TasksPage locale={locale} />;
     case "updates":
       return <UpdatesPage locale={locale} />;
     case "update":
@@ -117,10 +126,8 @@ export default async function LocalizedPage({ params }: { params: Promise<Params
     case "contact":
       return <TrustPage locale={locale} kind={target.name} />;
     default:
-      return (
-        <PageShell>
-          <p>404</p>
-        </PageShell>
-      );
+      // A route that exists in the registry but has no page yet must answer with
+      // a real 404, never a 200 body that merely prints "404".
+      notFound();
   }
 }
