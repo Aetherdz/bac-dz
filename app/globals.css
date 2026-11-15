@@ -1,0 +1,158 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --bg: 246 244 236;
+  --surface: 255 253 247;
+  --raised: 250 248 240;
+  --ink: 16 32 27;
+  --muted: 88 105 96;
+  --line: 219 214 199;
+  --brand: 14 90 60;
+  --brand-ink: 255 255 255;
+  --accent: 168 42 35;
+  --gold: 150 105 41;
+  color-scheme: light;
+}
+
+.dark {
+  --bg: 10 20 17;
+  --surface: 15 27 23;
+  --raised: 19 34 28;
+  --ink: 233 240 234;
+  --muted: 156 175 164;
+  --line: 39 56 48;
+  --brand: 96 207 156;
+  --brand-ink: 8 20 15;
+  --accent: 226 116 104;
+  --gold: 214 173 106;
+  color-scheme: dark;
+}
+
+* {
+  border-color: rgb(var(--line));
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+  scroll-behavior: smooth;
+  scroll-padding-top: 5.5rem;
+}
+
+body {
+  background-color: rgb(var(--bg));
+  color: rgb(var(--ink));
+  font-feature-settings: "kern" 1, "liga" 1;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+}
+
+::selection {
+  background: rgb(var(--brand) / 0.18);
+}
+
+/* Arabic typography: slightly larger, more open leading. */
+[dir="rtl"] body {
+  line-height: 1.85;
+  letter-spacing: 0;
+}
+
+[dir="rtl"] .font-display {
+  letter-spacing: 0;
+}
+
+h1, h2, h3, h4 {
+  text-wrap: balance;
+}
+
+p, li {
+  text-wrap: pretty;
+}
+
+@layer components {
+  .shell {
+    @apply mx-auto w-full max-w-shell px-5 sm:px-6 lg:px-8;
+  }
+  .card {
+    @apply rounded-card border border-line bg-surface;
+  }
+  .hairline {
+    @apply border-t border-line;
+  }
+  .eyebrow {
+    @apply inline-flex items-center gap-2 text-[11px] font-semibold uppercase tracking-[0.14em] text-muted;
+  }
+  .btn {
+    @apply inline-flex min-h-11 items-center justify-center gap-2 rounded-full border border-line bg-surface px-5 text-sm font-semibold text-ink transition-colors hover:border-brand hover:text-brand focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand disabled:cursor-not-allowed disabled:opacity-50;
+  }
+  .btn-primary {
+    @apply border-brand bg-brand text-brand-ink hover:bg-brand/90 hover:text-brand-ink;
+  }
+  .btn-sm {
+    @apply min-h-9 px-4 text-[13px];
+  }
+  .label {
+    @apply mb-1.5 block text-[13px] font-medium text-ink;
+  }
+  .input {
+    @apply min-h-11 w-full rounded-lg border border-line bg-surface px-3 text-sm text-ink shadow-sm outline-none transition-colors placeholder:text-muted/70 focus:border-brand focus:ring-1 focus:ring-brand;
+  }
+  .select {
+    @apply input appearance-none bg-[length:14px] bg-[left_0.75rem_center] bg-no-repeat pr-3 ps-9;
+  }
+  .link {
+    @apply text-brand underline decoration-brand/30 underline-offset-4 transition-colors hover:decoration-brand;
+  }
+  .chip {
+    @apply inline-flex items-center gap-1.5 whitespace-nowrap rounded-full border border-line bg-raised px-3 py-1 text-xs font-medium text-muted;
+  }
+  .num {
+    font-variant-numeric: tabular-nums;
+  }
+}
+
+/* Data tables */
+.table-wrap {
+  @apply -mx-5 overflow-x-auto px-5 sm:mx-0 sm:px-0;
+}
+table.data {
+  @apply w-full border-collapse text-sm;
+}
+table.data th,
+table.data td {
+  @apply border-b border-line px-3 py-2.5 text-start align-middle;
+}
+table.data thead th {
+  @apply bg-raised text-[11px] font-semibold uppercase tracking-wider text-muted;
+}
+table.data tbody tr:last-child td {
+  @apply border-b-0;
+}
+table.data td.n,
+table.data th.n {
+  @apply text-end;
+  font-variant-numeric: tabular-nums;
+}
+
+/* Focus visibility for keyboard users */
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible,
+summary:focus-visible {
+  outline: 2px solid rgb(var(--brand));
+  outline-offset: 2px;
+}
+
+/* Hide the theme script flash */
+html.no-transition * {
+  transition: none !important;
+}
+
+@media print {
+  header, footer, .no-print { display: none !important; }
+  body { background: #fff; color: #000; }
+  .card { border-color: #ccc; }
+}
