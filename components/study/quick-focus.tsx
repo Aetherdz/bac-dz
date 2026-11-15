@@ -90,11 +90,11 @@ function QuickRing({ locale }: { locale: Locale }) {
   return (
     <TimerRing
       progress={progress}
-      size={104}
-      stroke={3}
+      size={92}
+      stroke={2.5}
       label={`${tx(locale, { ar: "الوقت المتبقي", fr: "Temps restant", en: "Time left" })}: ${display}`}
     >
-      <span className="num text-[15px] font-semibold text-ink sm:text-[18px]">{display}</span>
+      <span className="num font-display text-[18px] font-semibold text-ink sm:text-[21px]">{display}</span>
     </TimerRing>
   );
 }

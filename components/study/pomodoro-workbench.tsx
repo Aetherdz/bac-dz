@@ -34,7 +34,7 @@ export function PomodoroWorkbench({ locale }: { locale: Locale }) {
       <section className="card min-w-0 p-5 sm:p-8" aria-labelledby="pomodoro-phase">
         <div className="flex items-center justify-between gap-3">
           <h2 id="pomodoro-phase" className="kicker">
-            {tx(locale, phaseCopy[state.phase])}
+            {tx(locale, { ar: "المؤقّت", fr: "Minuteur", en: "Timer" })}
           </h2>
           <span className="num shrink-0 text-[11px] text-muted">
             {state.completed} {tx(locale, { ar: "جلسة مكتملة", fr: "sessions terminées", en: "sessions done" })}
@@ -90,17 +90,19 @@ export function PomodoroWorkbench({ locale }: { locale: Locale }) {
 
         <TimerAnnouncement locale={locale} />
 
-        <div className="mt-7 flex flex-wrap items-center justify-between gap-3 border-t border-line pt-4">
-          <span className="text-[10.5px] uppercase tracking-[0.14em] text-muted">
-            {tx(locale, { ar: "دورة الراحة الطويلة", fr: "Cycle de pause longue", en: "Long-break cycle" })}
-          </span>
-          <div className="flex items-center gap-1.5" aria-hidden>
-            {Array.from({ length: cycle }, (_, index) => (
-              <span
-                key={index}
-                className={`h-2.5 w-2.5 border ${index < filled ? "border-brand bg-brand" : "border-line-strong bg-transparent"}`}
-              />
-            ))}
+        <div className="mt-7 border-t border-line pt-4">
+          <div className="flex items-center justify-between gap-4">
+            <span className="text-[10.5px] uppercase tracking-[0.14em] text-muted">
+              {tx(locale, { ar: "دورة الراحة الطويلة", fr: "Cycle de pause longue", en: "Long-break cycle" })}
+            </span>
+            <div className="flex flex-1 items-center gap-1.5" aria-hidden>
+              {Array.from({ length: cycle }, (_, index) => (
+                <span key={index} className={`h-[3px] flex-1 ${index < filled ? "bg-brand" : "bg-line"}`} />
+              ))}
+            </div>
+            <span className="num shrink-0 text-[11px] text-muted">
+              {filled}/{cycle}
+            </span>
           </div>
         </div>
       </section>
@@ -238,22 +240,33 @@ export function PomodoroWorkbench({ locale }: { locale: Locale }) {
  * the clock digits. Everything around it (settings, stats, buttons) is static.
  */
 function TimerFace({ locale }: { locale: Locale }) {
-  const { state, ready } = usePomodoro();
+  const { state, settings, ready } = usePomodoro();
   const { remaining, progress } = usePomodoroTick();
   const display = ready ? formatClock(remaining) : "--:--";
+  const total = state.phase === "focus" ? settings.focus : state.phase === "short" ? settings.short : settings.long;
 
   return (
     <TimerRing
       progress={progress}
       size={252}
-      stroke={4}
+      stroke={3}
+      ticks
       label={`${tx(locale, { ar: "الوقت المتبقي في الجلسة", fr: "Temps restant", en: "Time left in session" })}: ${display}`}
     >
       <div className="max-w-full text-center">
-        <div className="num text-[40px] font-semibold leading-none tracking-tight text-ink sm:text-[46px] lg:text-[54px]">
+        <div className="text-[10px] font-semibold uppercase tracking-[0.18em] text-muted">
+          {tx(locale, phaseCopy[state.phase])}
+        </div>
+        <div className="num mt-2 font-display text-[46px] font-semibold leading-none text-ink sm:text-[54px] lg:text-[62px]">
           {display}
         </div>
-        <div className="mt-2 text-[10.5px] uppercase tracking-[0.18em] text-muted">{tx(locale, phaseCopy[state.phase])}</div>
+        <div className="mt-2 text-[11px] text-muted">
+          {tx(locale, {
+            ar: `من ${total} دقيقة`,
+            fr: `sur ${total} minutes`,
+            en: `of ${total} minutes`,
+          })}
+        </div>
       </div>
     </TimerRing>
   );

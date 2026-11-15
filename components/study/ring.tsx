@@ -16,6 +16,7 @@ export function TimerRing({
   stroke = 6,
   children,
   label,
+  ticks = false,
   className = "",
 }: {
   progress: number;
@@ -23,6 +24,8 @@ export function TimerRing({
   stroke?: number;
   children?: ReactNode;
   label?: string;
+  /** Four cardinal marks, so the sweep reads as a clock face, not a gauge. */
+  ticks?: boolean;
   className?: string;
 }) {
   const clamped = Math.min(1, Math.max(0, Number.isFinite(progress) ? progress : 0));
@@ -39,6 +42,19 @@ export function TimerRing({
     >
       <svg viewBox={`0 0 ${size} ${size}`} aria-hidden className="h-full w-full -rotate-90">
         <circle cx={size / 2} cy={size / 2} r={radius} fill="none" stroke="rgb(var(--line))" strokeWidth={stroke} />
+        {ticks &&
+          [0, 90, 180, 270].map((angle) => (
+            <line
+              key={angle}
+              x1={size / 2}
+              y1={stroke}
+              x2={size / 2}
+              y2={stroke + 7}
+              stroke="rgb(var(--line-strong))"
+              strokeWidth={1}
+              transform={`rotate(${angle} ${size / 2} ${size / 2})`}
+            />
+          ))}
         <circle
           cx={size / 2}
           cy={size / 2}
