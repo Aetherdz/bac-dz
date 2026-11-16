@@ -16,7 +16,7 @@ export const SITE = {
 
 export function siteUrl(): string {
   const raw = process.env.NEXT_PUBLIC_SITE_URL?.trim();
-  const fallback = "http://localhost:3000";
+  const fallback = "https://bac-dz-iota.vercel.app";
   const value = raw && raw.length > 0 ? raw : fallback;
   return value.replace(/\/$/, "");
 }
