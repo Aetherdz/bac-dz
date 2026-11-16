@@ -11,3 +11,8 @@ next-env.d.ts
 .vercel
 coverage
 .test-build
+
+# Cloudflare Workers (OpenNext)
+.open-next/
+.wrangler/
+.dev.vars
