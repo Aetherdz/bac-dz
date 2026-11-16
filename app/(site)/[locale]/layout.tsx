@@ -1,4 +1,5 @@
 import type { Metadata, Viewport } from "next";
+import Script from "next/script";
 import { Amiri, IBM_Plex_Sans_Arabic } from "next/font/google";
 import { notFound } from "next/navigation";
 import "../../globals.css";
@@ -10,6 +11,7 @@ import { JsonLd, organizationSchema, websiteSchema } from "@/components/jsonld";
 import { PomodoroProvider } from "@/components/study/pomodoro-context";
 import { MobileTabBar } from "@/components/mobile-tabbar";
 import { PageTransition } from "@/components/page-transition";
+import { GoogleAnalytics } from "@next/third-parties/google";
 
 const sans = IBM_Plex_Sans_Arabic({
   subsets: ["arabic", "latin"],
@@ -100,6 +102,13 @@ export default async function LocaleLayout({
         <JsonLd data={organizationSchema()} />
         <JsonLd data={websiteSchema(typed)} />
       </body>
+      <GoogleAnalytics gaId="G-78S8BEKWL4" />
+      <Script
+        defer
+        src="https://static.cloudflareinsights.com/beacon.min.js"
+        data-cf-beacon='{"token": "7c685e3071ad4b318ff3ab94e77edc70"}'
+        strategy="afterInteractive"
+      />
     </html>
   );
 }
