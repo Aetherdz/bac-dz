@@ -11,6 +11,7 @@ import { countdownTarget, examSessions } from "@/content/exam-dates";
 import { absolute } from "@/lib/seo";
 import { Badge, Stat } from "@/components/ui";
 import { JsonLd, faqSchema, webPageSchema } from "@/components/jsonld";
+import { SearchForm } from "@/components/search-form";
 import { SourceList } from "@/components/source-list";
 import { BacCalculator } from "@/components/tools/bac-calculator";
 import { CountdownPanel } from "@/components/study/countdown";
@@ -27,7 +28,6 @@ import {
   IconClock,
   IconCompass,
   IconLayers,
-  IconSearch,
   IconTarget,
   IconWrench,
 } from "@/components/icons";
@@ -153,26 +153,15 @@ export function HomePage({ locale }: { locale: Locale }) {
               </Link>
             </div>
 
-            <form action={pathFor(locale, { name: "search" })} className="mt-8 hidden max-w-xl sm:block" role="search">
-              <label htmlFor="home-search" className="mb-2 block text-[11px] uppercase tracking-[0.14em] text-muted">
-                {t.searchLabel}
-              </label>
-              <div className="flex items-center gap-2 border border-line-strong bg-surface px-1 py-1 focus-within:border-brand">
-                <span className="ps-2.5 text-muted" aria-hidden>
-                  <IconSearch size={16} />
-                </span>
-                <input
-                  id="home-search"
-                  name="q"
-                  type="search"
-                  placeholder={t.searchPlaceholder}
-                  className="min-h-9 w-full bg-transparent text-sm text-ink outline-none placeholder:text-muted/70"
-                />
-                <button type="submit" className="btn btn-primary btn-sm shrink-0">
-                  {dict.actions.search}
-                </button>
-              </div>
-            </form>
+            <SearchForm
+              action={pathFor(locale, { name: "search" })}
+              id="home-search"
+              label={t.searchLabel}
+              placeholder={t.searchPlaceholder}
+              submitLabel={dict.actions.search}
+              className="mt-8 hidden max-w-xl sm:block"
+              labelClassName="mb-2 block text-[11px] uppercase tracking-[0.14em] text-muted"
+            />
 
             <dl className="mt-9 hidden max-w-xl grid-cols-2 gap-y-5 sm:grid sm:grid-cols-4">
               <Stat value={nationalStats.candidatesPerYear} label={t.statsStudents} />

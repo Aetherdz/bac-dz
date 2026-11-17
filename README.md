@@ -2,7 +2,7 @@
 
 An independent, Arabic-first platform for Algerian baccalaureate candidates: a weighted-average calculator, verified coefficient tables, an honest exam-paper index, revision tools, an orientation comparator and dated editorial guides.
 
-**Live:** https://bac-dz-iota.vercel.app (Vercel)
+**Live:** https://bac27-dz.vercel.app (Vercel)
 **Stack:** Next.js 15 App Router · React 19 · TypeScript · Tailwind CSS · no runtime database
 
 ---
@@ -113,7 +113,7 @@ The project deploys to Vercel with zero configuration:
 
 1. Push the repository to GitHub.
 2. Import it in Vercel (framework preset: Next.js).
-3. Set `NEXT_PUBLIC_SITE_URL` to the production origin (for example `https://bac-dz-iota.vercel.app`).
+3. Set `NEXT_PUBLIC_SITE_URL` to the production origin (for example `https://bac27-dz.vercel.app`).
 4. Deploy, then run the audits against the production URL.
 
 GitHub Pages is **not** used: the site relies on Next.js middleware (locale redirects), route handlers (`/api/og`, `/llms.txt`, `/ads.txt`) and server rendering for unknown paths, none of which GitHub Pages can run.

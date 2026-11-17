@@ -1,8 +1,8 @@
 "use client";
 
-import { useMemo } from "react";
+import { useMemo, useState, useTransition } from "react";
 import Link from "next/link";
-import { useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { getDict, type Locale } from "@/lib/i18n";
 import { pathFor, type RouteTarget } from "@/lib/routes";
 import { searchDocs } from "@/lib/search";
@@ -17,7 +17,17 @@ import { IconSearch } from "@/components/icons";
 export function SearchClient({ locale }: { locale: Locale }) {
   const dict = getDict(locale);
   const params = useSearchParams();
+  const router = useRouter();
   const query = (params.get("q") ?? "").slice(0, 80);
+  const [value, setValue] = useState(query);
+  const [, startTransition] = useTransition();
+  const action = pathFor(locale, { name: "search" });
+  const submit = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    const next = value.trim();
+    if (!next) return;
+    startTransition(() => router.push(`${action}?q=${encodeURIComponent(next)}`));
+  };
   const docs = useMemo(() => searchDocs(locale), [locale]);
 
   const results = useMemo(() => {
@@ -74,7 +84,7 @@ export function SearchClient({ locale }: { locale: Locale }) {
     <div className="shell py-10 sm:py-12">
       <SectionHeader as="h1" eyebrow={dict.actions.search} title={dict.home.searchLabel} intro={dict.home.searchPlaceholder} />
 
-      <form action={pathFor(locale, { name: "search" })} role="search" className="max-w-2xl">
+      <form action={action} onSubmit={submit} role="search" className="max-w-2xl">
         <label htmlFor="site-search" className="sr-only">
           {dict.home.searchLabel}
         </label>
@@ -86,7 +96,8 @@ export function SearchClient({ locale }: { locale: Locale }) {
             id="site-search"
             name="q"
             type="search"
-            defaultValue={query}
+            value={value}
+            onChange={(event) => setValue(event.target.value)}
             placeholder={dict.home.searchPlaceholder}
             className="min-h-9 w-full bg-transparent text-sm text-ink outline-none placeholder:text-muted/70"
           />
